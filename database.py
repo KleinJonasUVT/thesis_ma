@@ -1,6 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy import text
+from sqlalchemy.orm import sessionmaker
 import os
+
+
+
+
+# Rest of your code remains the same
 
 db_connection_string = os.environ['DB_CONNECTION_STRING']
 
@@ -88,13 +94,25 @@ def remove_rating_from_db(course_code, data):
         )
 
                                     
+def add_login_to_db(student_number, password):
+  with engine.connect() as conn:
+      conn.execute(
+          text("INSERT INTO users5 (student_number, password) VALUES (:student_number, :password)"),
+          {"student_number": student_number, "password": password}
+      )
 
-
+def check_credentials(student_number, password):
+  with engine.connect() as conn:
+      result = conn.execute(
+          text("SELECT * FROM users5 WHERE student_number = :student_number AND password = :password"),
+          {"student_number": student_number, "password": password}
+      )
+      return result.fetchone() is not None
 
 
 def add_interests_to_db(data):
   with engine.connect() as conn:
-      query = text("INSERT INTO interests4 (marketing, economics, management, sustainability, biology, politics, law, communication, Bachelor, Master) "
+      query = text("INSERT INTO users5 (marketing, economics, management, sustainability, biology, politics, law, communication, Bachelor, Master) "
                    "VALUES (:marketing, :economics, :management, :sustainability, :biology, :politics, :law, :communication, :Bachelor, :Master)")
 
       # Construct the parameter dictionary
@@ -112,4 +130,3 @@ def add_interests_to_db(data):
       }
 
       conn.execute(query, params)
-

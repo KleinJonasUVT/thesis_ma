@@ -1,5 +1,11 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
-from database import load_courses_from_db, add_rating_to_db, remove_rating_from_db, load_carousel_courses_from_db, load_best_courses_from_db, load_explore_courses_from_db, load_compulsory_courses_from_db, load_favorite_courses_from_db, add_interests_to_db
+from database import load_courses_from_db, add_rating_to_db, remove_rating_from_db, load_carousel_courses_from_db, load_best_courses_from_db, load_explore_courses_from_db, load_compulsory_courses_from_db, load_favorite_courses_from_db, add_interests_to_db, add_login_to_db, check_credentials
+from flask import request, redirect, url_for, flash
+
+
+
+# Rest of your code remains the same
+
 
 
 app = Flask(__name__)
@@ -16,9 +22,38 @@ filters = {
 def landing():
     return render_template('welcome.html')
 
-@app.route("/login")
+
+@app.route("/inlogpage", methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        student_number = request.form['student_number']
+        password = request.form['password']
+
+        # Check credentials
+        if check_credentials(student_number, password):
+            return redirect("state_interests.html")  
+        else:
+            return render_template('inlogpage.html')  
+
     return render_template('inlogpage.html')
+
+@app.route("/signin", methods=["GET", "POST"])
+def signin():
+    if request.method == 'POST':
+        # Extract student_number and password from the form data
+        student_number = request.form['student_number']
+        password = request.form['password']
+
+        # Call the function to add login details to the database
+        add_login_to_db(student_number, password)
+
+        # Redirect to the '/inlogpage' after processing the data
+        return redirect('/inlogpage')
+
+    # If the request method is GET, render the signin.html template
+    return render_template('signin.html')
+
+  
 
 @app.route("/home")
 def home():
@@ -34,10 +69,6 @@ def hello_world():
     courses = load_courses_from_db()
     return render_template('courses.html', courses=courses, filters=filters)
 
-
-@app.route('/logout')
-def logout():
-    pass
 
 @app.route("/welcome")
 def welcome():
