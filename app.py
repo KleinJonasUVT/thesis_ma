@@ -1,7 +1,11 @@
-from flask import Flask, render_template, jsonify, request, redirect
-from database import load_courses_from_db, add_rating_to_db, remove_rating_from_db, load_carousel_courses_from_db, load_best_courses_from_db, load_explore_courses_from_db, load_compulsory_courses_from_db, load_favorite_courses_from_db
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from database import load_courses_from_db, add_rating_to_db, remove_rating_from_db, load_carousel_courses_from_db, load_best_courses_from_db, load_explore_courses_from_db, load_compulsory_courses_from_db, load_favorite_courses_from_db, add_interests_to_db
+
 
 app = Flask(__name__)
+
+
+
 
 filters = {
     'Degree': ['Bachelor', 'Master', 'Pre-master'],
@@ -11,6 +15,10 @@ filters = {
 @app.route("/")
 def landing():
     return render_template('welcome.html')
+
+@app.route("/login")
+def login():
+    return render_template('inlogpage.html')
 
 @app.route("/home")
 def home():
@@ -26,9 +34,10 @@ def hello_world():
     courses = load_courses_from_db()
     return render_template('courses.html', courses=courses, filters=filters)
 
-@app.route("/inlogpage")
-def load_inlogpage():
-    return render_template('inlogpage.html')
+
+@app.route('/logout')
+def logout():
+    pass
 
 @app.route("/welcome")
 def welcome():
@@ -61,9 +70,18 @@ def rating_course(course_code):
     previous_page = request.referrer
     return redirect(previous_page)
 
-@app.route("/interests")
-def get_interests():
-    return render_template('interests.html')
+
+@app.route("/state_interests.html")
+def state_interests():
+    return render_template('state_interests.html')
+
+
+@app.route("/state_interests/stated.html", methods=['POST'])
+def stated_interests():
+    data = request.form
+    add_interests_to_db(data)
+    # Redirect to the '/home' page after processing the data
+    return redirect('/home')
 
 @app.route("/course/<course_code>/remove_rating", methods=['POST'])
 def remove_rating(course_code):
@@ -71,6 +89,7 @@ def remove_rating(course_code):
     remove_rating_from_db(course_code, data)
     previous_page = request.referrer
     return redirect(previous_page)
+
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

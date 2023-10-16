@@ -87,9 +87,29 @@ def remove_rating_from_db(course_code, data):
             {"course_code": course_code}
         )
 
+                                    
 
 
 
 
+def add_interests_to_db(data):
+  with engine.connect() as conn:
+      query = text("INSERT INTO interests4 (marketing, economics, management, sustainability, biology, politics, law, communication, Bachelor, Master) "
+                   "VALUES (:marketing, :economics, :management, :sustainability, :biology, :politics, :law, :communication, :Bachelor, :Master)")
 
+      # Construct the parameter dictionary
+      params = {
+          'marketing': data.get('marketing'),
+          'economics': data.get('economics'),
+          'management': data.get('management'),
+          'sustainability': data.get('sustainability'),
+          'biology': data.get('biology'),
+          'politics': data.get('politics'),
+          'law': data.get('law'),
+          'communication': data.get('communication'),
+          'Bachelor': data.get('Bachelor'),
+          'Master': data.get('Master')
+      }
+
+      conn.execute(query, params)
 
