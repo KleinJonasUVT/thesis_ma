@@ -46,7 +46,7 @@
         border-radius: 20px;
         cursor: pointer;
       }
-
+  
       .btn.btn-outline-primary:hover {
         background-color: #ACBED8; 
       }
@@ -63,7 +63,7 @@
       color: #ACBED8;
     }
 
-
+      
     </style>
   </head>
 <body>
@@ -72,38 +72,24 @@
     <h1><b>Login Page </b></h1>
     <h2><b>For Students</b></h2>
   </div>
-
+  
       <!-- Right Column -->
     <div class="col-md-6">
       <div class="rounded-container">
         <div class="centered-text">
           <img src="static/TiU_logo.png" alt="TiU Logo"><br><br><br><br>
-
+          
           <div class="container">
-
-            <form action="/inlogpage" method="post">
-
+            <form>
               <div class="form-group">
                 <label for="exampleInputEmail1">Student Number</label>
-                <input type="text" name="student_number" class="form-control rounded-textbox" placeholder="u123456">
-
-<br><br>
+                <input type="email" class="form-control rounded-textbox" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="u123456"><br><br>
             </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" name="password" class="form-control rounded-textbox" placeholder="Password">
-
-              </div><br>
-              <input type="checkbox" id="remember" name="remember">
-              <label for="remember">Remember me</label><br>
-
-              <br><br>
-              <input type="submit" value="Login" class="btn btn-outline-primary">
-
-              <br><br><br>
-
-
-
+                <input type="password" class="form-control rounded-textbox" id="exampleInputPassword1" placeholder="Password">
+              </div><br><br><br>
+              <a href="/home" target="_blank" class="btn btn-outline-primary">Log in</a>
             </form>
           </div>
         </div>
@@ -112,4 +98,4 @@
   </div>
 </body>
 </html>  
-
+  
